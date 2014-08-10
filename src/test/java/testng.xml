@@ -3,7 +3,7 @@
 <suite name="Rover tests" verbose="1" >
   <test name="Unit" >
     <packages>
-      <package name="org.mule.rover" />
+      <package name="com.github.zapata.rover" />
    </packages>
   </test> 
 </suite>
