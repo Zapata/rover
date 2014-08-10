@@ -5,7 +5,6 @@ import static org.testng.Assert.assertEquals;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.apache.commons.lang.StringUtils;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -44,8 +43,7 @@ public class ExplorerInputReaderTest {
 			ite = inputReader.readNextItinary();
 			while (ite != null) {
 				assertEquals(ite.getInitialPosition(), expectedPos);
-				assertEquals(StringUtils.join(ite.getInstructions(), ""),
-						expectedActions);
+				assertEquals(ite.getInstructions().toString(), expectedActions);
 				ite = inputReader.readNextItinary();
 			}
 		} catch (Throwable t) {
@@ -61,9 +59,9 @@ public class ExplorerInputReaderTest {
 				{ null, null, null },
 				{ "", null, null },
 				{ "\n", null, null },
-				{ "1 1 E\nL", new Position(1, 1, Orientation.EAST), "L" },
+				{ "1 1 E\nL", new Position(1, 1, Orientation.EAST), "[L]" },
 				{ "34 46 S\nLRM", new Position(34, 46, Orientation.SOUTH),
-						"LRM" }, { "4.4 5 E\n", null, null },
+						"[L, R, M]" }, { "4.4 5 E\n", null, null },
 				{ "6 6 Z\n", null, null }, { "12 34 N\nL R M", null, null },
 				{ "3 3 W\nLI", null, null } };
 	}
