@@ -1,8 +1,13 @@
 package com.github.zapata.rover;
 
 public enum Orientation {
-	NORTH("N", 0, 0, 1), SOUTH("S", 180, 0, -1), EAST("E", 90, 1, 0), WEST("W",
-			270, -1, 0);
+	NORTH("N", 0, 0, 1),
+
+	SOUTH("S", 180, 0, -1),
+
+	EAST("E", 90, 1, 0),
+
+	WEST("W", 270, -1, 0);
 
 	private final String label;
 	private final int degree;

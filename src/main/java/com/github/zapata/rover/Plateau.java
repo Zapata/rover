@@ -1,8 +1,8 @@
 package com.github.zapata.rover;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Plateau {
 
@@ -42,13 +42,12 @@ public class Plateau {
 			return false;
 		}
 
-		for (Rover rover : rovers) {
-			if (rover.getPosition().isSame(newX, newY)) {
-				return false;
-			}
-		}
+		return !hasRoverOnPosition(newX, newY);
+	}
 
-		return true;
+	private boolean hasRoverOnPosition(int newX, int newY) {
+		return rovers.stream().filter(r -> r.getPosition().isSame(newX, newY))
+				.findAny().isPresent();
 	}
 
 	public Rover landRover(Position initialPosition) {
@@ -58,10 +57,7 @@ public class Plateau {
 	}
 
 	public List<Position> getRoverPositions() {
-		List<Position> positions = new ArrayList<Position>(rovers.size());
-		for (Rover rover : rovers) {
-			positions.add(rover.getPosition());
-		}
-		return positions;
+		return rovers.stream().map(Rover::getPosition)
+				.collect(Collectors.toList());
 	}
 }

@@ -4,6 +4,7 @@ import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.stream.StreamSupport;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -36,15 +37,13 @@ public class ExplorerInputReaderTest {
 	@Test(dataProvider = "roverData")
 	public void checkRoverReading(String input, Position expectedPos,
 			String expectedActions) throws Throwable {
-		Itinary ite = null;
 		try {
 			ExplorerInputReader inputReader = new ExplorerInputReader(
 					new StringReader(input));
-			ite = inputReader.readNextItinary();
-			while (ite != null) {
-				assertEquals(ite.getInitialPosition(), expectedPos);
-				assertEquals(ite.getInstructions().toString(), expectedActions);
-				ite = inputReader.readNextItinary();
+			for (Itinary itinary : inputReader) {
+				assertEquals(itinary.getInitialPosition(), expectedPos);
+				assertEquals(itinary.getInstructions().toString(),
+						expectedActions);
 			}
 		} catch (Throwable t) {
 			if (expectedPos != null && expectedActions != null) {
@@ -71,11 +70,9 @@ public class ExplorerInputReaderTest {
 		ExplorerInputReader inputReader = new ExplorerInputReader(
 				new StringReader("5 5\n1 2 E\nLM\n3 4 N\nRRM"));
 		inputReader.readPlateau();
-		int i = 0;
-		while (inputReader.readNextItinary() != null) {
-			++i;
-		}
-		assertEquals(i, 2, "Nb of rover");
+		long count = StreamSupport.stream(inputReader.spliterator(), false)
+				.count();
+		assertEquals(count, 2, "Nb of rover");
 	}
 
 }

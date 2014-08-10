@@ -11,9 +11,7 @@ public class Rover {
 	}
 
 	public void apply(Plateau plateau, List<Instruction> actions) {
-		for (Instruction action : actions) {
-			action.processOn(this, plateau);
-		}
+		actions.forEach(action -> action.processOn(this, plateau));
 	}
 
 	public Position getPosition() {

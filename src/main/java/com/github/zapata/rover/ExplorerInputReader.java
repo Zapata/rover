@@ -1,14 +1,14 @@
 package com.github.zapata.rover;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
-public class ExplorerInputReader {
+public class ExplorerInputReader implements Iterable<Itinary> {
 
 	private final Scanner scanner;
 
@@ -16,7 +16,7 @@ public class ExplorerInputReader {
 		scanner = new Scanner(r);
 	}
 
-	public Plateau readPlateau() throws IOException {
+	public Plateau readPlateau() {
 		try {
 			return new Plateau(scanner.nextInt(), scanner.nextInt());
 		} catch (InputMismatchException ime) {
@@ -28,10 +28,15 @@ public class ExplorerInputReader {
 		}
 	}
 
-	public Itinary readNextItinary() throws IOException {
-		if (!scanner.hasNext()) {
+	public boolean hasNextItinary() {
+		return scanner.hasNext();
+	}
+
+	public Itinary readNextItinary() {
+		if (!hasNextItinary()) {
 			return null;
 		}
+
 		Position initialPosition = getInitialPosition();
 		List<Instruction> instructions = getInstructions();
 		return new Itinary(initialPosition, instructions);
@@ -44,14 +49,36 @@ public class ExplorerInputReader {
 
 	private List<Instruction> getInstructions() {
 		String rawInstructions = scanner.next();
-		List<Instruction> instructions = new ArrayList<Instruction>(
-				rawInstructions.length());
 
-		for (int i = 0; i < rawInstructions.length(); i++) {
-			instructions.add(Instruction.fromLabel(Character
-					.toString(rawInstructions.charAt(i))));
+		return rawInstructions.chars()
+				.mapToObj(c -> Character.toString((char) c))
+				.map(Instruction::fromLabel)
+				.collect(Collectors.toList());
+	}
+
+	public static final class ItinaryIterator implements Iterator<Itinary> {
+
+		private final ExplorerInputReader inputReader;
+
+		public ItinaryIterator(ExplorerInputReader inputReader) {
+			this.inputReader = inputReader;
 		}
-		return instructions;
+
+		@Override
+		public boolean hasNext() {
+			return inputReader.hasNextItinary();
+		}
+
+		@Override
+		public Itinary next() {
+			return inputReader.readNextItinary();
+		}
+
+	}
+
+	@Override
+	public Iterator<Itinary> iterator() {
+		return new ItinaryIterator(this);
 	}
 
 }

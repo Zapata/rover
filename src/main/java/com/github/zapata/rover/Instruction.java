@@ -1,5 +1,8 @@
 package com.github.zapata.rover;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public enum Instruction {
 	ROTATE_LEFT("L") {
 		@Override
@@ -38,14 +41,14 @@ public enum Instruction {
 	public abstract void processOn(Rover rover, Plateau plateau);
 
 	public static Instruction fromLabel(String label) {
+		Optional<Instruction> instruction = Optional.empty();
 		if (label != null) {
-			for (Instruction roverAction : values()) {
-				if (roverAction.label.equals(label)) {
-					return roverAction;
-				}
-			}
+			instruction = Arrays.stream(values())
+					.filter(i -> i.label.equals(label))
+					.findAny();
 		}
-		throw new IllegalArgumentException("Invalid label for instruction : "
-				+ label);
+		return instruction.orElseThrow(() -> new IllegalArgumentException(
+				"Invalid label for instruction : "
+						+ label));
 	}
 }
