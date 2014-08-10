@@ -6,17 +6,16 @@ import java.util.List;
 
 public class Plateau {
 
-	private final int[] size;
+	private final int maxX;
+
+	private final int maxY;
 
 	private final List<Rover> rovers = new LinkedList<Rover>();
 
-	public Plateau(int[] size) {
-		this.size = size;
-		if (size.length != 2) {
-			throw new IllegalArgumentException(
-					"Illegal dimention of the plateau: " + size.length
-							+ " expected 2.");
-		}
+	public Plateau(int maxX, int maxY) {
+		this.maxX = maxX;
+		this.maxY = maxY;
+
 		if (getMaxX() <= 0) {
 			throw new IllegalArgumentException(
 					"Illegal X size of the plateau (X <= 0): " + getMaxX());
@@ -28,11 +27,11 @@ public class Plateau {
 	}
 
 	protected int getMaxX() {
-		return size[0];
+		return maxX;
 	}
 
 	protected int getMaxY() {
-		return size[1];
+		return maxY;
 	}
 
 	public boolean isValid(int newX, int newY) {

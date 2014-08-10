@@ -1,17 +1,14 @@
 package com.github.zapata.rover;
 
-import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 public class NasaScenarioRunner {
-	public Plateau run(String filename) throws IOException {
-		ExplorerInputReader inputReader = null;
-		if (filename == null) {
-			inputReader = new ExplorerInputReader(System.in);
-		} else {
-			inputReader = new ExplorerInputReader(new File(filename));
-		}
+	public Plateau run(Reader reader) throws IOException {
+		ExplorerInputReader inputReader = new ExplorerInputReader(reader);
 
 		Plateau plateau = inputReader.readPlateau();
 
@@ -27,10 +24,11 @@ public class NasaScenarioRunner {
 	public static void main(String[] args) throws IOException {
 		NasaScenarioRunner runner = new NasaScenarioRunner();
 		if (args.length == 0) {
-			print(runner.run(null).getRoverPositions());
+			print(runner.run(new InputStreamReader(System.in))
+					.getRoverPositions());
 		} else {
 			for (String arg : args) {
-				print(runner.run(arg).getRoverPositions());
+				print(runner.run(new FileReader(arg)).getRoverPositions());
 			}
 		}
 	}

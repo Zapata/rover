@@ -7,19 +7,13 @@ import java.util.Arrays;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.github.zapata.rover.Instruction;
-import com.github.zapata.rover.Orientation;
-import com.github.zapata.rover.Plateau;
-import com.github.zapata.rover.Position;
-import com.github.zapata.rover.Rover;
-
 public class RoverTest {
 
 	@Test(dataProvider = "actionData")
 	public void checkActionProcessing(Position initialPos,
 			Instruction[] actions, Position finalPos) {
 		Rover rover = new Rover(initialPos);
-		rover.apply(new Plateau(new int[] { 5, 5 }), Arrays.asList(actions));
+		rover.apply(new Plateau(5, 5), Arrays.asList(actions));
 		assertEquals(rover.getPosition(), finalPos);
 	}
 
@@ -53,7 +47,7 @@ public class RoverTest {
 	@Test(dataProvider = "limitData")
 	public void checkLimits(Position initialPos) {
 		Rover rover = new Rover(initialPos);
-		rover.apply(new Plateau(new int[] { 5, 5 }),
+		rover.apply(new Plateau(5, 5),
 				Arrays.asList(new Instruction[] { Instruction.MOVE }));
 		assertEquals(rover.getPosition(), initialPos);
 	}
@@ -68,7 +62,7 @@ public class RoverTest {
 
 	@Test
 	public void checkCollision() {
-		Plateau plateau = new Plateau(new int[] { 5, 5 });
+		Plateau plateau = new Plateau(5, 5);
 		plateau.landRover(new Position(2, 2, Orientation.SOUTH));
 		Position initialPosition = new Position(2, 1, Orientation.NORTH);
 		Rover rover = plateau.landRover(initialPosition);

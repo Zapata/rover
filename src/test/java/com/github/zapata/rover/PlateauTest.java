@@ -3,14 +3,12 @@ package com.github.zapata.rover;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.github.zapata.rover.Plateau;
-
 public class PlateauTest {
 
 	@Test(dataProvider = "initializationData")
-	public void checkCreation(int[] size, String expectedError) {
+	public void checkCreation(int nbRows, int nbColumns, String expectedError) {
 		try {
-			new Plateau(size);
+			new Plateau(nbRows, nbColumns);
 		} catch (IllegalArgumentException iae) {
 			if (!iae.getMessage().contains(expectedError)) {
 				throw iae;
@@ -20,10 +18,8 @@ public class PlateauTest {
 
 	@DataProvider(name = "initializationData")
 	public Object[][] getInitializationData() {
-		return new Object[][] {
-				{ new int[] { 5, 5, 5 }, "Illegal dimention of the plateau" },
-				{ new int[] { -3, 5 }, "Illegal X size of the plateau" },
-				{ new int[] { 5, -4 }, "Illegal Y size of the plateau" },
+		return new Object[][] { { -3, 5, "Illegal X size of the plateau" },
+				{ 5, -4, "Illegal Y size of the plateau" },
 
 		};
 	}

@@ -3,16 +3,11 @@ package com.github.zapata.rover;
 import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 import org.apache.commons.lang.StringUtils;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import com.github.zapata.rover.ExplorerInputReader;
-import com.github.zapata.rover.Itinary;
-import com.github.zapata.rover.Orientation;
-import com.github.zapata.rover.Plateau;
-import com.github.zapata.rover.Position;
 
 public class ExplorerInputReaderTest {
 
@@ -20,7 +15,8 @@ public class ExplorerInputReaderTest {
 	public void checkPlateauReading(String input, int[] expected)
 			throws Throwable {
 		try {
-			Plateau plateau = new ExplorerInputReader(input).readPlateau();
+			Plateau plateau = new ExplorerInputReader(new StringReader(input))
+					.readPlateau();
 			assertEquals(plateau.getMaxX(), expected[0], "Max X");
 			assertEquals(plateau.getMaxY(), expected[1], "Max Y");
 		} catch (Throwable t) {
@@ -43,7 +39,8 @@ public class ExplorerInputReaderTest {
 			String expectedActions) throws Throwable {
 		Itinary ite = null;
 		try {
-			ExplorerInputReader inputReader = new ExplorerInputReader(input);
+			ExplorerInputReader inputReader = new ExplorerInputReader(
+					new StringReader(input));
 			ite = inputReader.readNextItinary();
 			while (ite != null) {
 				assertEquals(ite.getInitialPosition(), expectedPos);
@@ -74,7 +71,7 @@ public class ExplorerInputReaderTest {
 	@Test
 	public void checkCompleteRead() throws IOException {
 		ExplorerInputReader inputReader = new ExplorerInputReader(
-				"5 5\n1 2 E\nLM\n3 4 N\nRRM");
+				new StringReader("5 5\n1 2 E\nLM\n3 4 N\nRRM"));
 		inputReader.readPlateau();
 		int i = 0;
 		while (inputReader.readNextItinary() != null) {
