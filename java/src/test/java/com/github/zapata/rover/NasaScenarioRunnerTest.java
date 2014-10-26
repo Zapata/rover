@@ -3,7 +3,9 @@ package com.github.zapata.rover;
 import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -11,8 +13,8 @@ import org.testng.annotations.Test;
 public class NasaScenarioRunnerTest {
 	@Test
 	public void checkFullScenario() throws IOException {
-		InputStreamReader input = new InputStreamReader(getClass()
-				.getResourceAsStream("completeScenario.txt"));
+		Reader input = Files.newBufferedReader(Paths
+				.get("../scenarios/complete.txt"));
 		Plateau result = new NasaScenarioRunner().run(input);
 		List<Position> positions = result.getRoverPositions();
 		assertEquals(positions.size(), 2);

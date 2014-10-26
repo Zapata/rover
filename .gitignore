@@ -1,1 +1,6 @@
+**/.classpath
+**/.project
+**/.settings
+**/.buildpath
 java/target
+java/test-output
